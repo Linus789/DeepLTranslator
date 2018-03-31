@@ -26,15 +26,19 @@ To translate texts asynchronously, please use this method:<br />
 
 Example:
 ```java
-DeepLTranslator.asyncTranslate("Hello, my name is Linus. And what's your name?", Language.ENGLISH, Language.GERMAN, (translation, exception) -> {
-    if(translation != null) {
+DeepLTranslator.asyncTranslate("Hello, my name is Linus. And what's your name?", Language.ENGLISH, Language.GERMAN, new TranslationConsumer() {
+    @Override
+    public void handleTranslation(Translation translation) {
         if(translation.printError()) {
             return;
         }
 
         translation.getTranslations().forEach(System.out::println);
-    } else if(exception != null) {
-        exception.printStackTrace();
+    }
+
+    @Override
+    public void handleException(Exception e) {
+        e.printStackTrace();
     }
 });
 ```
