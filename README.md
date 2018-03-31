@@ -1,5 +1,5 @@
 # DeepLTranslator
-> The DeepL Translator is an API written in Java that translates via the DeepL server sentences. This works without having a premium access and can be used free of charge. Requires Java 9.
+> This project is a simple <a href="https://www.deepl.com/translator">DeepL Translator</a> API written in Java. It translates via the DeepL server sentences. This works without having a premium access and can be used free of charge. Requires Java 9.
 
 
 ## Code Example
