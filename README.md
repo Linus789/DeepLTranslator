@@ -38,6 +38,7 @@ DeepLTranslator.asyncTranslate("Hello, my name is Linus. And what's your name?",
 ```
 
 ### Changing Timeout Duration
+Default timeout duration is 10 seconds.<br /><br />
 To change the timeout duration, please use this method:<br />
 `DeepLTranslator#setTimeoutDuration(Duration timeoutDuration)`
 
@@ -46,7 +47,18 @@ Example:
 DeepLTranslator.setTimeoutDuration(Duration.ofSeconds(5));
 ```
 
+### Change Waiting Duration For Repeating Request At Error 1042901/"Too many requests."
+Default waiting duration is 3 seconds.<br /><br />
+To change the waiting duration for repeating a request, please use this method:<br />
+`DeepLTranslator#setRepeatRequestTime(Duration repeatRequestTime)`
+
+Example:
+```java
+DeepLTranslator.setRepeatRequestTime(Duration.ofSeconds(5));
+```
+
 ### Limit The Number Of Maximum Threads
+Default number of maximum threads is Integer.MAX_VALUE.<br /><br />
 To limit the number of maximum threads that handle asynchronous translation, use the following method:<br />
 `DeepLTranslator#setExecutor(ExecutorService executor)`
 
