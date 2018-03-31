@@ -42,6 +42,26 @@ public final class DeepLTranslator {
     private static Duration TIMEOUT_DURATION = Duration.ofSeconds(10);
 
     /**
+     * Used if error 1042901/"Too many requests." is thrown.
+     * Request will be repeated when value is true.
+     *
+     * Default value is true.
+     *
+     * @see DeepLTranslator#translate(String, Language, Language)
+     */
+    private static boolean REPEAT_REQUEST = true;
+
+    /**
+     * Can only be used if {@link DeepLTranslator#REPEAT_REQUEST} is true.
+     * This value represents the waiting time for repeating the request.
+     *
+     * Default duration is 3 seconds.
+     *
+     * @see DeepLTranslator#translate(String, Language, Language)
+     */
+    private static Duration REPEAT_TIME = Duration.ofSeconds(3);
+
+    /**
      * Translates a text, which is limited to 5000 characters,
      * from a source {@code Language} (from) to a target {@code Language} (to).
      *
@@ -71,6 +91,18 @@ public final class DeepLTranslator {
 
         JSONObject request = getJsonRequest(text, from, to);
         JSONObject response = sendRequest(request);
+
+        if(REPEAT_REQUEST) {
+            if (response.has("error")) {
+                JSONObject error = response.getJSONObject("error");
+
+                if ((error.has("code") && error.getInt("code") == 1042901)
+                        || (error.has("message") && error.getString("message").equals("Too many requests."))) {
+                    Thread.sleep(REPEAT_TIME.toMillis());
+                    return translate(text, from, to);
+                }
+            }
+        }
 
         return new Translation(response);
     }
@@ -228,5 +260,43 @@ public final class DeepLTranslator {
      */
     public static void setTimeoutDuration(Duration timeoutDuration) {
         TIMEOUT_DURATION = timeoutDuration;
+    }
+
+    /**
+     * Used if error 1042901/"Too many requests." is thrown.
+     * Returns whether the client should repeat the request.
+     *
+     * @return repeat request
+     */
+    public static boolean isRepeatRequest() {
+        return REPEAT_REQUEST;
+    }
+
+    /**
+     * Used if error 1042901/"Too many requests." is thrown.
+     * Sets whether the client should repeat the request.
+     *
+     * @param repeatRequest repeat request
+     */
+    public static void setRepeatRequest(boolean repeatRequest) {
+        REPEAT_REQUEST = repeatRequest;
+    }
+
+    /**
+     * Returns the waiting time for repeating a request.
+     *
+     * @return waiting time as {@link Duration}
+     */
+    public static Duration getRepeatTime() {
+        return REPEAT_TIME;
+    }
+
+    /**
+     * Sets the waiting time for repeating a request.
+     *
+     * @param repeatTime waiting time
+     */
+    public static void setRepeatTime(Duration repeatTime) {
+        REPEAT_TIME = repeatTime;
     }
 }
