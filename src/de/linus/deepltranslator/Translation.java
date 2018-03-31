@@ -155,6 +155,31 @@ public final class Translation {
     }
 
     /**
+     * Prints out the error.
+     *
+     * @return whether an error occurred
+     */
+    public boolean printError() {
+        if(!hasError) {
+            return false;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[DeepLTranslator] Error");
+
+        if(getErrorCode().isPresent()) {
+            stringBuilder.append(" ").append(getErrorCode().getAsInt());
+        }
+
+        if(getErrorMessage().isPresent()) {
+            stringBuilder.append(": ").append(getErrorMessage().get());
+        }
+
+        System.err.println(stringBuilder.toString());
+        return true;
+    }
+
+    /**
      * Returns the source language (from).
      *
      * @return the language

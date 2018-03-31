@@ -5,7 +5,6 @@ import de.linus.deepltranslator.Language;
 import de.linus.deepltranslator.Translation;
 
 import java.time.Duration;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 
 public final class Example {
@@ -24,10 +23,7 @@ public final class Example {
             //Asynchronously request
             asynchronous();
 
-            /*
-            After finishing everything, the executor should shutdown,
-            else the program won't stop
-             */
+            //After finishing everything, the executor should shutdown, else the program won't stop
             DeepLTranslator.shutdown();
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,11 +36,8 @@ public final class Example {
         //Translating this text from english to german synchronously
         Translation translation = DeepLTranslator.translate("Hello, my name is Linus. And what's your name?", Language.ENGLISH, Language.GERMAN);
 
-        //Checks if an error occurred on server side
-        if(translation.hasError()) {
-            //If there's an error message, it will be printed
-            Optional<String> errorMessage = translation.getErrorMessage();
-            errorMessage.ifPresent(System.out::println);
+        //Checks if an error occurred on server side, if yes it will be printed
+        if(translation.printError()) {
             return;
         }
 
@@ -64,11 +57,8 @@ public final class Example {
         DeepLTranslator.asyncTranslate("Hello, my name is Linus. And what's your name?", Language.ENGLISH, Language.GERMAN, (translation, exception) -> {
             //Checks if there's a translation (either there's a translation or an exception)
             if(translation != null) {
-                //Checks if an error occurred on server side
-                if(translation.hasError()) {
-                    //If there's an error message, it will be printed
-                    Optional<String> errorMessage = translation.getErrorMessage();
-                    errorMessage.ifPresent(System.out::println);
+                //Checks if an error occurred on server side, if yes it will be printed
+                if(translation.printError()) {
                     return;
                 }
 
