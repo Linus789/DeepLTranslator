@@ -34,6 +34,7 @@ public final class Translation {
      */
     Translation(JSONObject response) {
         this.response = response;
+        
         this.beamList = new ArrayList<>();
         this.translationList = new ArrayList<>();
 
