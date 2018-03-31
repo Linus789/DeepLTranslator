@@ -59,7 +59,7 @@ public final class DeepLTranslator {
      *
      * @see DeepLTranslator#translate(String, Language, Language)
      */
-    private static Duration REPEAT_TIME = Duration.ofSeconds(3);
+    private static Duration REPEAT_REQUEST_TIME = Duration.ofSeconds(3);
 
     /**
      * Translates a text, which is limited to 5000 characters,
@@ -98,7 +98,7 @@ public final class DeepLTranslator {
 
                 if ((error.has("code") && error.getInt("code") == 1042901)
                         || (error.has("message") && error.getString("message").equals("Too many requests."))) {
-                    Thread.sleep(REPEAT_TIME.toMillis());
+                    Thread.sleep(REPEAT_REQUEST_TIME.toMillis());
                     return translate(text, from, to);
                 }
             }
@@ -287,16 +287,16 @@ public final class DeepLTranslator {
      *
      * @return waiting time as {@link Duration}
      */
-    public static Duration getRepeatTime() {
-        return REPEAT_TIME;
+    public static Duration getRepeatRequestTime() {
+        return REPEAT_REQUEST_TIME;
     }
 
     /**
      * Sets the waiting time for repeating a request.
      *
-     * @param repeatTime waiting time
+     * @param repeatRequestTime waiting time
      */
-    public static void setRepeatTime(Duration repeatTime) {
-        REPEAT_TIME = repeatTime;
+    public static void setRepeatRequestTime(Duration repeatRequestTime) {
+        REPEAT_REQUEST_TIME = repeatRequestTime;
     }
 }
