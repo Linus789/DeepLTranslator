@@ -112,8 +112,7 @@ public final class DeepLTranslator {
      * from a source {@code Language} (from) to a target {@code Language} (to).
      *
      * The {@link TranslationConsumer} is used, to handle translations
-     * and exceptions. But if an exception is thrown, the
-     * translation is null. And it's the other way around, too.
+     * and exceptions.
      *
      * Possible reasons for exceptions:
      * - text is null or empty
@@ -124,7 +123,7 @@ public final class DeepLTranslator {
      * @param text source text
      * @param from source language
      * @param to target language
-     * @param translationConsumer consumes a {@code Translation} <b>or</b> an {@code Exception}
+     * @param translationConsumer handles {@code Translation}s and {@code Exception}s
      *
      * @see DeepLTranslator#translate(String, Language, Language)
      */
@@ -132,9 +131,9 @@ public final class DeepLTranslator {
         EXECUTOR.submit(() -> {
             try {
                 Translation translation = translate(text, from, to);
-                translationConsumer.response(translation, null);
+                translationConsumer.handleTranslation(translation);
             } catch (Exception e) {
-                translationConsumer.response(null, e);
+                translationConsumer.handleException(e);
             }
         });
     }
