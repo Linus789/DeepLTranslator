@@ -23,4 +23,5 @@ public interface TranslationConsumer {
      * @see DeepLTranslator#asyncTranslate(String, Language, Language, TranslationConsumer)
      */
     void response(Translation translation, Exception e);
+    
 }
