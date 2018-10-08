@@ -20,7 +20,7 @@ public final class DeepLTranslator {
      * The base url, used to request a translation.
      * @see DeepLTranslator#sendRequest(JSONObject)
      */
-    private static final String BASE_URL = "https://www.deepl.com/jsonrpc";
+    private static final String BASE_URL = "https://www2.deepl.com/jsonrpc";
 
     /**
      * Used to generate threads for an asynchronous translation.
