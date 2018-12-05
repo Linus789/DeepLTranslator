@@ -14,7 +14,9 @@ public enum Language {
     SPANISH("ES"),
     ITALIAN("IT"),
     DUTCH("NL"),
-    POLISH("PL");
+    POLISH("PL"),
+    PORTUGUESE("PT"),
+    RUSSIAN("RU");
 
     private String languageCode;
 
