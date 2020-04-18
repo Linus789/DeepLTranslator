@@ -19,7 +19,7 @@ Add the dependency
 </dependency>
 ```
 ### Gradle
-Add the JitPack repository in your root build.gradle at the end of repositories:
+Add the JitPack repository in your root build.gradle at the end of repositories
 ```kotlin
 allprojects {
     repositories {
