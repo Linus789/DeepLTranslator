@@ -31,7 +31,7 @@ allprojects {
 Add the dependency
 ```kotlin
 dependencies {
-    implementation 'com.github.User:Repo:Tag'
+    implementation 'com.github.Linus789:DeepLTranslator:v1.0.0'
 }
 ```
 
