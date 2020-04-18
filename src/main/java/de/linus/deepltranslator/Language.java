@@ -8,13 +8,17 @@ import java.util.Optional;
 public enum Language {
 
     AUTO_DETECT("auto"),
-    GERMAN("DE"),
-    ENGLISH("EN"),
-    FRENCH("FR"),
-    SPANISH("ES"),
-    ITALIAN("IT"),
-    DUTCH("NL"),
-    POLISH("PL");
+    ENGLISH("en"),
+    GERMAN("de"),
+    FRENCH("fr"),
+    SPANISH("es"),
+    ITALIAN("it"),
+    DUTCH("nl"),
+    POLISH("pl"),
+    PORTUGUESE("pt"),
+    RUSSIAN("ru"),
+    JAPANESE("ja"),
+    CHINESE("zh");
 
     private String languageCode;
 
@@ -24,7 +28,6 @@ public enum Language {
 
     /**
      * Returns the language code (ISO 639‑1 scheme).
-     * The language code is used to build a request json.
      *
      * @return language code (ISO 639‑1)
      */
@@ -47,4 +50,5 @@ public enum Language {
 
         return Optional.empty();
     }
+
 }
