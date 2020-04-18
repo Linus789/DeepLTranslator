@@ -42,6 +42,7 @@ DeepLConfiguration deepLConfiguration = new DeepLConfiguration.Builder()
         .setTimeout(Duration.ofSeconds(10))
         .setRepetitions(3)
         .setRepetitionsDelay(retryNumber -> Duration.ofMillis(3000 + 5000 * retryNumber))
+        .setTimezone(Timezone.EUROPE_BERLIN)
         .build();
 
 DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);
