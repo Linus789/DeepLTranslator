@@ -1,19 +1,38 @@
 # DeepLTranslator
 > This project is a simple <a href="https://www.deepl.com/translator">DeepL Translator</a> API written in Java. It translates via the DeepL website sentences. This works without having a premium access and can be used free of charge.
 
-## Maven
-```
+## Install
+### Maven
+Add the JitPack repository in your pom.xml
+```xml
 <repository>
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
 </repository>
 ```
-```
+Add the dependency
+```xml
 <dependency>
     <groupId>com.github.Linus789</groupId>
     <artifactId>DeepLTranslator</artifactId>
     <version>v1.0.0</version>
 </dependency>
+```
+### Gradle
+Add the JitPack repository in your root build.gradle at the end of repositories:
+```kotlin
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+Add the dependency
+```kotlin
+dependencies {
+    implementation 'com.github.User:Repo:Tag'
+}
 ```
 
 ## Examples
@@ -59,7 +78,7 @@ deepLTranslator.translateAsync("Hello, guys. My name is Linus.", Language.ENGLIS
 ```
 
 ### Shutdown
-Stops all running threads.
+Stops all running threads
 ```java
 DeepLTranslator.shutdown();
 ```
