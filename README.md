@@ -1,6 +1,9 @@
 # DeepLTranslator
 > This project is a simple <a href="https://www.deepl.com/translator">DeepL Translator</a> API written in Java. It translates via the DeepL website sentences. This works without having a premium access and can be used free of charge.
 
+## Prerequisites
+* [Java 8 with JavaFX](https://github.com/MachinePublishers/jBrowserDriver#prerequisites)
+
 ## Install
 ### Maven
 Add the JitPack repository in your pom.xml
