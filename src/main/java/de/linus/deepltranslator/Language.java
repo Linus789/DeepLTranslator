@@ -8,17 +8,30 @@ import java.util.Optional;
 public enum Language {
 
     AUTO_DETECT("auto"),
-    ENGLISH("en"),
-    GERMAN("de"),
-    FRENCH("fr"),
-    SPANISH("es"),
-    ITALIAN("it"),
+    BULGARIAN("bg"),
+    CHINESE("zh"),
+    CZECH("cs"),
+    DANISH("da"),
     DUTCH("nl"),
+    ENGLISH("en"),
+    ESTONIAN("et"),
+    FINNISH("fi"),
+    FRENCH("fr"),
+    GERMAN("de"),
+    GREEK("el"),
+    HUNGARIAN("hu"),
+    ITALIAN("it"),
+    JAPANESE("ja"),
+    LATVIAN("lv"),
+    LITHUANIAN("lt"),
     POLISH("pl"),
     PORTUGUESE("pt"),
+    ROMANIAN("ro"),
     RUSSIAN("ru"),
-    JAPANESE("ja"),
-    CHINESE("zh");
+    SLOVAK("sk"),
+    SLOVENIAN("sl"),
+    SPANISH("es"),
+    SWEDISH("sv");
 
     private final String languageCode;
 
