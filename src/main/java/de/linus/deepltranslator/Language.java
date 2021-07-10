@@ -20,7 +20,7 @@ public enum Language {
     JAPANESE("ja"),
     CHINESE("zh");
 
-    private String languageCode;
+    private final String languageCode;
 
     Language(String languageCode) {
         this.languageCode = languageCode;

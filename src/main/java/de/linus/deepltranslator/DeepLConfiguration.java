@@ -15,7 +15,7 @@ public class DeepLConfiguration {
      *
      * @see DeepLTranslatorBase#getTranslation(String, Language, Language)
      */
-    private Duration timeout;
+    private final Duration timeout;
 
     /**
      * Used if an error occurs.
@@ -23,7 +23,7 @@ public class DeepLConfiguration {
      *
      * Default value is 3.
      */
-    private int repetitions;
+    private final int repetitions;
 
     /**
      * Can only be used if {@link DeepLConfiguration#repetitions} isn't zero.
@@ -32,7 +32,7 @@ public class DeepLConfiguration {
      * Default interval is [3000 + 5000 * retryNumber] milliseconds.
      * Note: The first retry has the retryNumber 0.
      */
-    private Function<Integer, Duration> repetitionsDelay;
+    private final Function<Integer, Duration> repetitionsDelay;
 
     /**
      * Whether the translation should be post-processed.
@@ -40,7 +40,7 @@ public class DeepLConfiguration {
      *
      * By default, post-processing is enabled.
      */
-    private boolean postProcessing;
+    private final boolean postProcessing;
 
     /**
      * The timezone the browser instances are using.
@@ -48,7 +48,7 @@ public class DeepLConfiguration {
      *
      * @see com.machinepublishers.jbrowserdriver.JBrowserDriver
      */
-    private Timezone timezone;
+    private final Timezone timezone;
 
     private DeepLConfiguration(Duration timeout, int repetitions, Function<Integer, Duration> repetitionsDelay, boolean postProcessing, Timezone timezone) {
         this.timeout = timeout;
@@ -122,7 +122,7 @@ public class DeepLConfiguration {
         public Builder() {
             timeout = Duration.ofSeconds(10);
             repetitions = 3;
-            repetitionsDelay = retryNumber -> Duration.ofMillis(3000 + 5000 * retryNumber);
+            repetitionsDelay = retryNumber -> Duration.ofMillis(3000L + 5000L * retryNumber);
             postProcessing = true;
             timezone = Timezone.UTC;
         }

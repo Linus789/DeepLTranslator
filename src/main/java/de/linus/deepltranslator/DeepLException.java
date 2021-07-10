@@ -5,7 +5,7 @@ package de.linus.deepltranslator;
  */
 public class DeepLException extends Exception {
 
-    private String message;
+    private final String message;
 
     DeepLException(String message) {
         this.message = message;
