@@ -18,7 +18,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.Linus789</groupId>
     <artifactId>DeepLTranslator</artifactId>
-    <version>v1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 ### Gradle
@@ -34,7 +34,7 @@ allprojects {
 Add the dependency
 ```kotlin
 dependencies {
-    implementation 'com.github.Linus789:DeepLTranslator:v1.0.0'
+    implementation 'com.github.Linus789:DeepLTranslator:1.1.0'
 }
 ```
 
@@ -45,7 +45,7 @@ DeepLConfiguration deepLConfiguration = new DeepLConfiguration.Builder()
         .setTimeout(Duration.ofSeconds(10))
         .setRepetitions(3)
         .setRepetitionsDelay(retryNumber -> Duration.ofMillis(3000 + 5000 * retryNumber))
-        .setTimezone(Timezone.EUROPE_BERLIN)
+        .setPostProcessing(true)
         .build();
 
 DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);
