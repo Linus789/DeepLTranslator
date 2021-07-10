@@ -138,6 +138,9 @@ class DeepLTranslatorBase {
         if(text == null)
             return null;
 
+        if(!configuration.isPostProcessingEnabled())
+            return text;
+
         return text
                 .trim()
                 .replaceAll("(?:\r?\n)+", " ")

@@ -35,6 +35,14 @@ public class DeepLConfiguration {
     private Function<Integer, Duration> repetitionsDelay;
 
     /**
+     * Whether the translation should be post-processed.
+     * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+     *
+     * By default, post-processing is enabled.
+     */
+    private boolean postProcessing;
+
+    /**
      * The timezone the browser instances are using.
      * Default timezone is Timezone.UTC.
      *
@@ -42,10 +50,11 @@ public class DeepLConfiguration {
      */
     private Timezone timezone;
 
-    private DeepLConfiguration(Duration timeout, int repetitions, Function<Integer, Duration> repetitionsDelay, Timezone timezone) {
+    private DeepLConfiguration(Duration timeout, int repetitions, Function<Integer, Duration> repetitionsDelay, boolean postProcessing, Timezone timezone) {
         this.timeout = timeout;
         this.repetitions = repetitions;
         this.repetitionsDelay = repetitionsDelay;
+        this.postProcessing = postProcessing;
         this.timezone = timezone;
     }
 
@@ -83,6 +92,16 @@ public class DeepLConfiguration {
     }
 
     /**
+     * Whether the translation should be post-processed.
+     * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+     *
+     * By default, post-processing is enabled.
+     */
+    public boolean isPostProcessingEnabled() {
+        return postProcessing;
+    }
+
+    /**
      * The timezone the browser instances are using.
      * Default timezone is Timezone.UTC.
      *
@@ -97,12 +116,14 @@ public class DeepLConfiguration {
         private Duration timeout;
         private int repetitions;
         private Function<Integer, Duration> repetitionsDelay;
+        private boolean postProcessing;
         private Timezone timezone;
 
         public Builder() {
             timeout = Duration.ofSeconds(10);
             repetitions = 3;
             repetitionsDelay = retryNumber -> Duration.ofMillis(3000 + 5000 * retryNumber);
+            postProcessing = true;
             timezone = Timezone.UTC;
         }
 
@@ -143,6 +164,17 @@ public class DeepLConfiguration {
         }
 
         /**
+         * Whether the translation should be post-processed.
+         * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+         *
+         * By default, post-processing is enabled.
+         */
+        public Builder setPostProcessing(boolean postProcessing) {
+            this.postProcessing = postProcessing;
+            return this;
+        }
+
+        /**
          * The timezone the browser instances are using.
          * Default timezone is Timezone.UTC.
          *
@@ -157,7 +189,7 @@ public class DeepLConfiguration {
          * Builds the configuration.
          */
         public DeepLConfiguration build() {
-            return new DeepLConfiguration(timeout, repetitions, repetitionsDelay, timezone);
+            return new DeepLConfiguration(timeout, repetitions, repetitionsDelay, postProcessing, timezone);
         }
 
     }
