@@ -1,7 +1,7 @@
 package de.linus.deepltranslator;
 
 /**
- * The error which occurred while trying to receive a translation.
+ * An error which occurred while trying to receive a translation.
  */
 public class DeepLException extends Exception {
 

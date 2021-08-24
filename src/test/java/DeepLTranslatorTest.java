@@ -9,7 +9,6 @@ public class DeepLTranslatorTest {
     public static void main(String[] args) throws InterruptedException {
         DeepLConfiguration deepLConfiguration = new DeepLConfiguration.Builder()
                 .setRepetitions(0)
-                .setTimezone(Timezone.EUROPE_BERLIN)
                 .build();
 
         DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);

@@ -1,7 +1,5 @@
 package de.linus.deepltranslator;
 
-import com.machinepublishers.jbrowserdriver.Timezone;
-
 import java.time.Duration;
 import java.util.function.Function;
 
@@ -42,20 +40,11 @@ public class DeepLConfiguration {
      */
     private final boolean postProcessing;
 
-    /**
-     * The timezone the browser instances are using.
-     * Default timezone is Timezone.UTC.
-     *
-     * @see com.machinepublishers.jbrowserdriver.JBrowserDriver
-     */
-    private final Timezone timezone;
-
-    private DeepLConfiguration(Duration timeout, int repetitions, Function<Integer, Duration> repetitionsDelay, boolean postProcessing, Timezone timezone) {
+    private DeepLConfiguration(Duration timeout, int repetitions, Function<Integer, Duration> repetitionsDelay, boolean postProcessing) {
         this.timeout = timeout;
         this.repetitions = repetitions;
         this.repetitionsDelay = repetitionsDelay;
         this.postProcessing = postProcessing;
-        this.timezone = timezone;
     }
 
     /**
@@ -101,30 +90,18 @@ public class DeepLConfiguration {
         return postProcessing;
     }
 
-    /**
-     * The timezone the browser instances are using.
-     * Default timezone is Timezone.UTC.
-     *
-     * @see com.machinepublishers.jbrowserdriver.JBrowserDriver
-     */
-    public Timezone getTimezone() {
-        return timezone;
-    }
-
     public static class Builder {
 
         private Duration timeout;
         private int repetitions;
         private Function<Integer, Duration> repetitionsDelay;
         private boolean postProcessing;
-        private Timezone timezone;
 
         public Builder() {
             timeout = Duration.ofSeconds(10);
             repetitions = 3;
             repetitionsDelay = retryNumber -> Duration.ofMillis(3000L + 5000L * retryNumber);
             postProcessing = true;
-            timezone = Timezone.UTC;
         }
 
         /**
@@ -175,21 +152,10 @@ public class DeepLConfiguration {
         }
 
         /**
-         * The timezone the browser instances are using.
-         * Default timezone is Timezone.UTC.
-         *
-         * @see com.machinepublishers.jbrowserdriver.JBrowserDriver
-         */
-        public Builder setTimezone(Timezone timezone) {
-            this.timezone = timezone;
-            return this;
-        }
-
-        /**
          * Builds the configuration.
          */
         public DeepLConfiguration build() {
-            return new DeepLConfiguration(timeout, repetitions, repetitionsDelay, postProcessing, timezone);
+            return new DeepLConfiguration(timeout, repetitions, repetitionsDelay, postProcessing);
         }
 
     }

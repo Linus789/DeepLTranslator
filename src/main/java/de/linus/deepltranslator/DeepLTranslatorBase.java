@@ -78,7 +78,6 @@ class DeepLTranslatorBase {
             driver = new JBrowserDriver(
                     Settings.builder()
                             .userAgent(UserAgent.CHROME)
-                            .timezone(configuration.getTimezone())
                             .screen(new Dimension(1920, 1080))
                             .ajaxWait(100)
                             .ajaxResourceTimeout(configuration.getTimeout().toMillis())
