@@ -1,5 +1,7 @@
 package de.linus.deepltranslator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,7 +35,18 @@ public enum Language {
     SPANISH("es"),
     SWEDISH("sv");
 
+    private static Map<String, Language> codeToLanguage;
     private final String languageCode;
+
+    static {
+        Map<String, Language> codeToLanguage = new HashMap<>();
+
+        for(Language language : Language.values()) {
+            codeToLanguage.put(language.getLanguageCode(), language);
+        }
+
+        Language.codeToLanguage = codeToLanguage;
+    }
 
     Language(String languageCode) {
         this.languageCode = languageCode;
@@ -55,13 +68,7 @@ public enum Language {
      * @return the language
      */
     public static Optional<Language> getLanguage(String languageCode) {
-        for(Language language : Language.values()) {
-            if(language.getLanguageCode().equals(languageCode)) {
-                return Optional.of(language);
-            }
-        }
-
-        return Optional.empty();
+        return Optional.ofNullable(codeToLanguage.get(languageCode));
     }
 
 }
