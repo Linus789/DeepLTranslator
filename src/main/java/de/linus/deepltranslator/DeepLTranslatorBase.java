@@ -22,7 +22,7 @@ class DeepLTranslatorBase {
     /**
      * For asynchronous translating.
      *
-     * @see DeepLTranslator#translateAsync(String, SourceLanguage, TargetLanguage, TranslationConsumer)
+     * @see DeepLTranslator#translateAsync(String, SourceLanguage, TargetLanguage)
      */
     static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 

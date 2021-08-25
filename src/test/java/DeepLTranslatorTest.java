@@ -26,22 +26,16 @@ public class DeepLTranslatorTest {
     }
 
     private static void async(DeepLTranslator deepLTranslator) {
-        deepLTranslator.translateAsync("Hello, guys. My name is Linus.", SourceLanguage.ENGLISH, TargetLanguage.GERMAN, new TranslationConsumer() {
-            @Override
-            public void handleTranslation(String translation) {
-                System.out.println(translation);
-            }
+        deepLTranslator.translateAsync("Hello, guys. My name is Linus.", SourceLanguage.ENGLISH, TargetLanguage.GERMAN)
+                .whenComplete((res, ex) -> {
+                    if (ex != null) {
+                        ex.printStackTrace();
+                    } else {
+                        System.out.println(res);
+                    }
 
-            @Override
-            public void handleException(Exception e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void handleFinally() {
-                DeepLTranslator.shutdown();
-            }
-        });
+                    DeepLTranslator.shutdown();
+                });
     }
 
     private static final String[] sentences = {

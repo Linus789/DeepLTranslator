@@ -3,6 +3,8 @@ package de.linus.deepltranslator;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.CompletableFuture;
+
 public class DeepLTranslator extends DeepLTranslatorBase {
 
     /**
@@ -37,7 +39,7 @@ public class DeepLTranslator extends DeepLTranslatorBase {
      * @return the translation
      * @throws Exception an exception
      */
-    public String translate(String text, SourceLanguage from, TargetLanguage to) throws Exception {
+    public String translate(String text, SourceLanguage from, TargetLanguage to) throws IllegalStateException, TimeoutException {
         isValid(text, from, to);
 
         TimeoutException timeoutException = null;
@@ -46,7 +48,10 @@ public class DeepLTranslator extends DeepLTranslatorBase {
             try {
                 return getTranslation(text, from, to);
             } catch (TimeoutException e) {
-                Thread.sleep(getConfiguration().getRepetitionsDelay().apply(i).toMillis());
+                try {
+                    Thread.sleep(getConfiguration().getRepetitionsDelay().apply(i).toMillis());
+                } catch (InterruptedException ignore) {}
+
                 timeoutException = e;
             }
         }
@@ -60,20 +65,14 @@ public class DeepLTranslator extends DeepLTranslatorBase {
     /**
      * @see DeepLTranslator#translate(String, SourceLanguage, TargetLanguage)
      */
-    public void translateAsync(String text, SourceLanguage from, TargetLanguage to, TranslationConsumer translationConsumer) throws IllegalStateException {
+    public CompletableFuture<String> translateAsync(String text, SourceLanguage from, TargetLanguage to) throws IllegalStateException {
         isValid(text, from, to);
 
-        EXECUTOR.submit(() -> {
-            try {
-                translationConsumer.passTranslation(translate(text, from, to));
-            } catch (Exception e) {
-                translationConsumer.passException(e);
-            }
-        });
+        return CompletableFuture.supplyAsync(() -> translate(text, from, to), EXECUTOR);
     }
 
     /**
-     * Tries to quit all browsers and cancel all active threads, which were started for asynchronous translating.
+     * Tries to quit all browsers and all active threads, which were started for asynchronous translating.
      */
     public static void shutdown() {
         GLOBAL_INSTANCES.forEach(WebDriver::quit);
