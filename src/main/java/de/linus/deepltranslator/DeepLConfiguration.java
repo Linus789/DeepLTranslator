@@ -34,7 +34,9 @@ public class DeepLConfiguration {
 
     /**
      * Whether the translation should be post-processed.
-     * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+     *
+     * If post-processing is enabled, leading and trailing spaces are removed
+     * and multiple consecutive spaces are replaced with a single space.
      *
      * By default, post-processing is disabled.
      */
@@ -82,7 +84,9 @@ public class DeepLConfiguration {
 
     /**
      * Whether the translation should be post-processed.
-     * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+     *
+     * If post-processing is enabled, leading and trailing spaces are removed
+     * and multiple consecutive spaces are replaced with a single space.
      *
      * By default, post-processing is disabled.
      */
@@ -142,7 +146,9 @@ public class DeepLConfiguration {
 
         /**
          * Whether the translation should be post-processed.
-         * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
+         *
+         * If post-processing is enabled, leading and trailing spaces are removed
+         * and multiple consecutive spaces are replaced with a single space.
          *
          * By default, post-processing is disabled.
          */

@@ -222,7 +222,6 @@ class DeepLTranslatorBase {
         if(result != null && configuration.isPostProcessingEnabled()) {
             result = result
                     .trim()
-                    .replaceAll("(?:\r?\n)+", " ")
                     .replaceAll("\\s{2,}", " ");
         }
 
