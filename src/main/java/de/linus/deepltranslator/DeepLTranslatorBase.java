@@ -1,12 +1,13 @@
 package de.linus.deepltranslator;
 
-import com.google.common.net.UrlEscapers;
-import com.machinepublishers.jbrowserdriver.JBrowserDriver;
-import com.machinepublishers.jbrowserdriver.Settings;
-import com.machinepublishers.jbrowserdriver.UserAgent;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -21,19 +22,68 @@ class DeepLTranslatorBase {
     /**
      * For asynchronous translating.
      *
-     * @see DeepLTranslator#translateAsync(String, Language, Language, TranslationConsumer)
+     * @see DeepLTranslator#translateAsync(String, SourceLanguage, TargetLanguage, TranslationConsumer)
      */
     static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
     /**
      * All browser instances created.
      */
-    static final List<JBrowserDriver> GLOBAL_INSTANCES = new ArrayList<>();
+    static final List<WebDriver> GLOBAL_INSTANCES = new ArrayList<>();
 
     /**
      * Available browser instances for this configuration.
      */
-    private final LinkedBlockingQueue<JBrowserDriver> INSTANCES = new LinkedBlockingQueue<>();
+    private static final LinkedBlockingQueue<WebDriver> AVAILABLE_INSTANCES = new LinkedBlockingQueue<>();
+
+    /**
+     * User-Agent for WebDriver
+     */
+    private static final String USER_AGENT;
+
+    /**
+     * Script to disable animations on a website.
+     * Source: https://github.com/dcts/remove-CSS-animations
+     */
+    private static final String DISABLE_ANIMATIONS_SCRIPT =
+            "document.querySelector('html > head').insertAdjacentHTML(\"beforeend\", \"" +
+            "<style>\\n" +
+            "* {\\n" +
+            "  -o-transition-property: none !important;\\n" +
+            "  -moz-transition-property: none !important;\\n" +
+            "  -ms-transition-property: none !important;\\n" +
+            "  -webkit-transition-property: none !important;\\n" +
+            "  transition-property: none !important;\\n" +
+            "}\\n" +
+            "* {\\n" +
+            "  -o-transform: none !important;\\n" +
+            "  -moz-transform: none !important;\\n" +
+            "  -ms-transform: none !important;\\n" +
+            "  -webkit-transform: none !important;\\n" +
+            "  transform: none !important;\\n" +
+            "}\\n" +
+            "* {\\n" +
+            "  -webkit-animation: none !important;\\n" +
+            "  -moz-animation: none !important;\\n" +
+            "  -o-animation: none !important;\\n" +
+            "  -ms-animation: none !important;\\n" +
+            "  animation: none !important;\\n" +
+            "}\\n" +
+            "</style>\\n" +
+            "\");";
+
+    /**
+     * For debugging purposes.
+     */
+    public static boolean HEADLESS = true;
+
+    static {
+        // Set default user agent
+        ChromeDriver dummyDriver = newWebDriver();
+        String userAgent = (String) dummyDriver.executeScript("return navigator.userAgent");
+        USER_AGENT = userAgent.replace("HeadlessChrome", "Chrome");
+        dummyDriver.close();
+    }
 
     /**
      * All settings
@@ -57,7 +107,7 @@ class DeepLTranslatorBase {
     /**
      * Checks if all arguments are valid, if not, an exception is thrown.
      */
-    void isValid(String text, Language from, Language to) throws IllegalStateException {
+    void isValid(String text, SourceLanguage from, TargetLanguage to) throws IllegalStateException {
         if(text == null || text.trim().isEmpty()) {
             throw new IllegalStateException("Text is null or empty");
         } else if(from == null || to == null) {
@@ -71,86 +121,112 @@ class DeepLTranslatorBase {
      * Generates a request with all settings like timeout etc.
      * and returns the translation if succeeded.
      */
-    String getTranslation(String text, Language from, Language to) throws DeepLException {
-        JBrowserDriver driver = INSTANCES.poll();
+    String getTranslation(String text, SourceLanguage from, TargetLanguage to) throws TimeoutException {
+        long timeoutMillisEnd = System.currentTimeMillis() + configuration.getTimeout().toMillis();
+        WebDriver driver = AVAILABLE_INSTANCES.poll();
 
-        if(driver == null) {
-            driver = new JBrowserDriver(
-                    Settings.builder()
-                            .userAgent(UserAgent.CHROME)
-                            .screen(new Dimension(1920, 1080))
-                            .ajaxWait(100)
-                            .ajaxResourceTimeout(configuration.getTimeout().toMillis())
-                            .connectTimeout((int) configuration.getTimeout().toMillis())
-                            .cache(true)
-                            .build()
-            );
+        try {
+            if (driver == null) {
+                driver = newWebDriver();
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(timeoutMillisEnd - System.currentTimeMillis()));
 
-            GLOBAL_INSTANCES.add(driver);
+                GLOBAL_INSTANCES.add(driver);
+                driver.get("https://www.deepl.com/translator");
+                ((ChromeDriver) driver).executeScript(DISABLE_ANIMATIONS_SCRIPT);
+            }
+        } catch (TimeoutException e) {
+            GLOBAL_INSTANCES.remove(driver);
+            driver.close();
+            throw e;
         }
 
-        String url = "https://www.deepl.com/translator#"
-                        + from.getLanguageCode()
-                        + "/"
-                        + to.getLanguageCode()
-                        + "/"
-                        +  UrlEscapers.urlFragmentEscaper().escape(text);
+        try {
+            // Source language button
+            driver.findElements(By.className("lmt__language_select__active")).get(0).click();
+            By srcButtonBy = By.xpath("//button[@dl-test='" + from.getAttributeValue() + "']");
+            WebDriverWait waitSource = new WebDriverWait(driver, Duration.ofMillis(timeoutMillisEnd - System.currentTimeMillis()));
+            waitSource.until(ExpectedConditions.visibilityOfElementLocated(srcButtonBy));
+            driver.findElement(srcButtonBy).click();
 
-        String result;
-        long end = System.currentTimeMillis() + configuration.getTimeout().toMillis();
+            // Target language button
+            driver.findElements(By.className("lmt__language_select__active")).get(1).click();
+            By targetButtonBy = By.xpath("//button[@dl-test='" + to.getAttributeValue() + "']");
+            WebDriverWait waitTarget = new WebDriverWait(driver, Duration.ofMillis(timeoutMillisEnd - System.currentTimeMillis()));
+            waitTarget.until(ExpectedConditions.visibilityOfElementLocated(targetButtonBy));
+            driver.findElement(targetButtonBy).click();
+        }  catch (TimeoutException e) {
+            AVAILABLE_INSTANCES.offer(driver);
+            throw e;
+        }
 
-        driver.get(url);
+        String result = null;
+        TimeoutException timeoutException = null;
+        By targetTextBy = By.id("target-dummydiv");
 
-        do {
-            result = readResult(driver);
+        try {
+            // Source text
+            driver.findElement(By.className("lmt__source_textarea")).sendKeys(text);
 
-            if(result != null && !result.isEmpty())
-                break;
+            // Target text
+            WebDriverWait waitText = new WebDriverWait(driver, Duration.ofMillis(timeoutMillisEnd - System.currentTimeMillis()));
+            waitText.pollingEvery(Duration.ofMillis(100));
+            ExpectedCondition<Boolean> textCondition;
 
-            if(System.currentTimeMillis() > end)
-                throw new DeepLException("Timed out.");
+            if (text.contains("[...]")) {
+                textCondition = ExpectedConditions.and(
+                        DriverWaitUtils.attributeNotBlank(targetTextBy, "innerHTML"),
+                        DriverWaitUtils.attributeNotChanged(targetTextBy, "innerHTML", Duration.ofMillis(1000))
+                );
+            } else {
+                textCondition = ExpectedConditions.and(
+                        DriverWaitUtils.attributeNotBlank(targetTextBy, "innerHTML"),
+                        DriverWaitUtils.attributeNotContains(targetTextBy, "innerHTML", "[...]"),
+                        DriverWaitUtils.attributeNotChanged(targetTextBy, "innerHTML", Duration.ofMillis(1000))
+                );
+            }
 
-            driver.pageWait();
-        } while (true);
+            waitText.until(textCondition);
+            result = driver.findElement(targetTextBy).getAttribute("innerHTML");
+        } catch (TimeoutException e) {
+            timeoutException = e;
+        }
 
-        int statusCode = driver.getStatusCode();
+        WebDriver finalDriver = driver;
 
-        INSTANCES.offer(driver);
+        EXECUTOR.submit(() -> {
+            By buttonClearBy = By.className("lmt__clear_text_button");
+            By sourceText = By.id("source-dummydiv");
 
-        if(statusCode != 200)
-            throw new DeepLException("Received status code " + statusCode + ".");
+            try {
+                finalDriver.findElement(buttonClearBy).click();
+            } catch (NoSuchElementException ignored) {}
+
+            WebDriverWait waitCleared = new WebDriverWait(finalDriver, Duration.ofSeconds(10));
+
+            try {
+                waitCleared.until(ExpectedConditions.and(
+                        DriverWaitUtils.attributeBlank(sourceText, "innerHTML"),
+                        DriverWaitUtils.attributeBlank(targetTextBy, "innerHTML")
+                ));
+                AVAILABLE_INSTANCES.offer(finalDriver);
+            } catch (TimeoutException e) {
+                GLOBAL_INSTANCES.remove(finalDriver);
+                finalDriver.close();
+            }
+        });
+
+        if (timeoutException != null)
+            throw timeoutException;
+
+        // Post-processing
+        if(result != null && configuration.isPostProcessingEnabled()) {
+            result = result
+                    .trim()
+                    .replaceAll("(?:\r?\n)+", " ")
+                    .replaceAll("\\s{2,}", " ");
+        }
 
         return result;
-    }
-
-    /**
-     * Returns the translation, or null if the translation is pending or something went wrong.
-     */
-    private String readResult(JBrowserDriver driver) {
-        WebElement webElement = driver.findElementByClassName("lmt__translations_as_text__text_btn");
-
-        if(webElement == null)
-            return null;
-
-        String text = webElement.getAttribute("textContent");
-
-        if(text == null)
-            return null;
-
-        if(!configuration.isPostProcessingEnabled())
-            return text;
-
-        return text
-                .trim()
-                .replaceAll("(?:\r?\n)+", " ")
-                .replaceAll("\\s{2,}", " ");
-    }
-
-    /**
-     * Whether the request should be repeated or not.
-     */
-    boolean repeat(int repeated) {
-        return configuration.getRepetitions() == -1 || configuration.getRepetitions() > repeated;
     }
 
     /**
@@ -158,6 +234,32 @@ class DeepLTranslatorBase {
      */
     public DeepLConfiguration getConfiguration() {
         return configuration;
+    }
+
+    /**
+     * Create new WebDriver instance.
+     */
+    private static ChromeDriver newWebDriver() {
+        ChromeOptions options = new ChromeOptions();
+
+        if (HEADLESS) {
+            options.addArguments("--headless");
+        }
+
+        options.addArguments("--disable-gpu", "--window-size=1920,1080");
+        options.addArguments("--disable-blink-features=AutomationControlled");
+
+        if (USER_AGENT != null) {
+            options.addArguments("--user-agent=" + USER_AGENT);
+        }
+
+        ChromeDriver driver = new ChromeDriver(options);
+        driver.executeScript("Object.defineProperty(screen, 'height', {value: 1080, configurable: true, writeable: true});");
+        driver.executeScript("Object.defineProperty(screen, 'width', {value: 1920, configurable: true, writeable: true});");
+        driver.executeScript("Object.defineProperty(screen, 'availWidth', {value: 1920, configurable: true, writeable: true});");
+        driver.executeScript("Object.defineProperty(screen, 'availHeight', {value: 1080, configurable: true, writeable: true});");
+
+        return driver;
     }
 
 }

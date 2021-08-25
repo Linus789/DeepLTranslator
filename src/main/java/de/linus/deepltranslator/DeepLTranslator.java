@@ -1,6 +1,7 @@
 package de.linus.deepltranslator;
 
-import com.machinepublishers.jbrowserdriver.JBrowserDriver;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 
 public class DeepLTranslator extends DeepLTranslatorBase {
 
@@ -36,32 +37,30 @@ public class DeepLTranslator extends DeepLTranslatorBase {
      * @return the translation
      * @throws Exception an exception
      */
-    public String translate(String text, Language from, Language to) throws Exception {
+    public String translate(String text, SourceLanguage from, TargetLanguage to) throws Exception {
         isValid(text, from, to);
 
-        return translate(text, from, to, -1);
-    }
+        TimeoutException timeoutException = null;
 
-    /**
-     * @see DeepLTranslator#translate(String, Language, Language)
-     */
-    private String translate(String text, Language from, Language to, int repeated) throws Exception {
-        try {
-            return getTranslation(text, from, to);
-        } catch (DeepLException e) {
-            if(repeat(++repeated)) {
-                Thread.sleep(getConfiguration().getRepetitionsDelay().apply(repeated).toMillis());
-                return translate(text, from, to, repeated);
+        for (int i = 0; i <= getConfiguration().getRepetitions(); i++) {
+            try {
+                return getTranslation(text, from, to);
+            } catch (TimeoutException e) {
+                Thread.sleep(getConfiguration().getRepetitionsDelay().apply(i).toMillis());
+                timeoutException = e;
             }
-
-            throw e;
         }
+
+        if (timeoutException != null)
+            throw timeoutException;
+
+        return null;
     }
 
     /**
-     * @see DeepLTranslator#translate(String, Language, Language)
+     * @see DeepLTranslator#translate(String, SourceLanguage, TargetLanguage)
      */
-    public void translateAsync(String text, Language from, Language to, TranslationConsumer translationConsumer) throws IllegalStateException {
+    public void translateAsync(String text, SourceLanguage from, TargetLanguage to, TranslationConsumer translationConsumer) throws IllegalStateException {
         isValid(text, from, to);
 
         EXECUTOR.submit(() -> {
@@ -77,7 +76,7 @@ public class DeepLTranslator extends DeepLTranslatorBase {
      * Tries to quit all browsers and cancel all active threads, which were started for asynchronous translating.
      */
     public static void shutdown() {
-        GLOBAL_INSTANCES.forEach(JBrowserDriver::quit);
+        GLOBAL_INSTANCES.forEach(WebDriver::quit);
         EXECUTOR.shutdownNow();
     }
 

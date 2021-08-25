@@ -11,7 +11,7 @@ public class DeepLConfiguration {
      *
      * Default duration is 10 seconds.
      *
-     * @see DeepLTranslatorBase#getTranslation(String, Language, Language)
+     * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
      */
     private final Duration timeout;
 
@@ -36,7 +36,7 @@ public class DeepLConfiguration {
      * Whether the translation should be post-processed.
      * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
      *
-     * By default, post-processing is enabled.
+     * By default, post-processing is disabled.
      */
     private final boolean postProcessing;
 
@@ -53,7 +53,7 @@ public class DeepLConfiguration {
      *
      * Default duration is 10 seconds.
      *
-     * @see DeepLTranslatorBase#getTranslation(String, Language, Language)
+     * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
      */
     public Duration getTimeout() {
         return timeout;
@@ -84,7 +84,7 @@ public class DeepLConfiguration {
      * Whether the translation should be post-processed.
      * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
      *
-     * By default, post-processing is enabled.
+     * By default, post-processing is disabled.
      */
     public boolean isPostProcessingEnabled() {
         return postProcessing;
@@ -101,7 +101,7 @@ public class DeepLConfiguration {
             timeout = Duration.ofSeconds(10);
             repetitions = 3;
             repetitionsDelay = retryNumber -> Duration.ofMillis(3000L + 5000L * retryNumber);
-            postProcessing = true;
+            postProcessing = false;
         }
 
         /**
@@ -110,7 +110,7 @@ public class DeepLConfiguration {
          *
          * Default duration is 10 seconds.
          *
-         * @see DeepLTranslatorBase#getTranslation(String, Language, Language)
+         * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
          */
         public Builder setTimeout(Duration timeout) {
             this.timeout = timeout;
@@ -144,7 +144,7 @@ public class DeepLConfiguration {
          * Whether the translation should be post-processed.
          * If post-processing is enabled, line breaks are removed and multiple consecutive spaces are replaced with a single space.
          *
-         * By default, post-processing is enabled.
+         * By default, post-processing is disabled.
          */
         public Builder setPostProcessing(boolean postProcessing) {
             this.postProcessing = postProcessing;

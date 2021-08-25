@@ -3,7 +3,7 @@ package de.linus.deepltranslator;
 /**
  * The TranslationConsumer is used to handle translations and exceptions.
  *
- * @see DeepLTranslator#translateAsync(String, Language, Language, TranslationConsumer)
+ * @see DeepLTranslator#translateAsync(String, SourceLanguage, TargetLanguage, TranslationConsumer)
  */
 public class TranslationConsumer {
 

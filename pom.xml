@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <jbrowserdriver.version>1.1.1</jbrowserdriver.version>
+        <selenium.version>4.0.0-beta-4</selenium.version>
         <guava.version>30.1.1-jre</guava.version>
 
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
@@ -24,9 +24,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.machinepublishers</groupId>
-            <artifactId>jbrowserdriver</artifactId>
-            <version>${jbrowserdriver.version}</version>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
