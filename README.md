@@ -2,7 +2,7 @@
 > This project is a simple <a href="https://www.deepl.com/translator">DeepL Translator</a> API written in Java. It translates via the DeepL website sentences. This works without having a premium access and can be used free of charge.
 
 ## Prerequisites
-* [Java 8 with JavaFX](https://github.com/MachinePublishers/jBrowserDriver#prerequisites)
+* ChromeDriver installed and located in [PATH](https://en.wikipedia.org/wiki/PATH_(variable))
 
 ## Install
 ### Maven
@@ -18,7 +18,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.Linus789</groupId>
     <artifactId>DeepLTranslator</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 ### Gradle
@@ -34,7 +34,7 @@ allprojects {
 Add the dependency
 ```kotlin
 dependencies {
-    implementation 'com.github.Linus789:DeepLTranslator:1.1.0'
+    implementation 'com.github.Linus789:DeepLTranslator:2.0.0'
 }
 ```
 
@@ -45,7 +45,7 @@ DeepLConfiguration deepLConfiguration = new DeepLConfiguration.Builder()
         .setTimeout(Duration.ofSeconds(10))
         .setRepetitions(3)
         .setRepetitionsDelay(retryNumber -> Duration.ofMillis(3000 + 5000 * retryNumber))
-        .setPostProcessing(true)
+        .setPostProcessing(false)
         .build();
 
 DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);
@@ -54,7 +54,7 @@ DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);
 ### Synchronous translating
 ```java
 try {
-    String translation = deepLTranslator.translate("I ran into a similar problem yesterday.", Language.ENGLISH, Language.GERMAN);
+    String translation = deepLTranslator.translate("I ran into a similar problem yesterday.", SourceLanguage.ENGLISH, TargetLanguage.GERMAN);
     System.out.println(translation);
 } catch (Exception e) {
     e.printStackTrace();
@@ -62,23 +62,27 @@ try {
 ```
 
 ### Asynchronous translating
+
 ```java
-deepLTranslator.translateAsync("Hello, guys. My name is Linus.", Language.ENGLISH, Language.GERMAN, new TranslationConsumer() {
-    @Override
-    public void handleTranslation(String translation) {
-        System.out.println(translation);
-    }
+deepLTranslator.translateAsync("Detected cow running backwards.", SourceLanguage.ENGLISH, TargetLanguage.GERMAN)
+        .whenComplete((res, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+            } else {
+                System.out.println(res);
+            }
+        });
+```
 
-    @Override
-    public void handleException(Exception e) {
-        e.printStackTrace();
-    }
-
-    @Override
-    public void handleFinally() {
-        System.out.println("Translation/Exception handled.");
-    }
-});
+### Await termination
+Blocks until all translations from one `DeepLTranslator` instance have completed execution, or the timeout occurs,
+or the current thread is interrupted, whichever happens first.
+```java
+try {
+    deepLTranslator.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
 ```
 
 ### Shutdown
