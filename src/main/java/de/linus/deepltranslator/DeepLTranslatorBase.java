@@ -49,12 +49,13 @@ class DeepLTranslatorBase {
     private static final LinkedBlockingQueue<WebDriver> AVAILABLE_INSTANCES = new LinkedBlockingQueue<>();
 
     /**
-     * User-Agent for WebDriver
+     * User-Agent for WebDriver.
      */
     private static final String USER_AGENT;
 
     /**
      * Script to disable animations on a website.
+     * <p>
      * Source: https://github.com/dcts/remove-CSS-animations
      */
     private static final String DISABLE_ANIMATIONS_SCRIPT =
@@ -98,12 +99,12 @@ class DeepLTranslatorBase {
     }
 
     /**
-     * All settings
+     * All settings.
      */
     private final DeepLConfiguration configuration;
 
     /**
-     * With default settings
+     * With default settings.
      */
     DeepLTranslatorBase() {
         this.configuration = new DeepLConfiguration.Builder().build();
@@ -111,7 +112,7 @@ class DeepLTranslatorBase {
     }
 
     /**
-     * With custom settings
+     * With custom settings.
      */
     DeepLTranslatorBase(DeepLConfiguration configuration) {
         this.configuration = configuration;

@@ -8,7 +8,7 @@ public class DeepLConfiguration {
     /**
      * If the http response didn't receive within the specified time,
      * the request cancels.
-     *
+     * <p></p>
      * Default duration is 10 seconds.
      *
      * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
@@ -17,27 +17,27 @@ public class DeepLConfiguration {
 
     /**
      * Used if an error occurs.
-     * -1 is used for repeating the request until it succeeds.
-     *
+     * <p>-1 is used for repeating the request until it succeeds.
+     * <p></p>
      * Default value is 3.
      */
     private final int repetitions;
 
     /**
-     * Can only be used if {@link DeepLConfiguration#repetitions} isn't zero.
+     * Is only of use if {@link DeepLConfiguration#repetitions} isn't zero.
      * This value represents the delay with which the request is repeated.
-     *
+     * <p></p>
      * Default interval is [3000 + 5000 * retryNumber] milliseconds.
-     * Note: The first retry has the retryNumber 0.
+     * <p>Note: The first retry has the retryNumber 0.
      */
     private final Function<Integer, Duration> repetitionsDelay;
 
     /**
      * Whether the translation should be post-processed.
-     *
+     * <p></p>
      * If post-processing is enabled, leading and trailing spaces are removed
      * and multiple consecutive spaces are replaced with a single space.
-     *
+     * <p></p>
      * By default, post-processing is disabled.
      */
     private final boolean postProcessing;
@@ -52,7 +52,7 @@ public class DeepLConfiguration {
     /**
      * If the http response didn't receive within the specified time,
      * the request cancels.
-     *
+     * <p></p>
      * Default duration is 10 seconds.
      *
      * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
@@ -63,8 +63,8 @@ public class DeepLConfiguration {
 
     /**
      * Used if an error occurs.
-     * -1 is used for repeating the request until it succeeds.
-     *
+     * <p>-1 is used for repeating the request until it succeeds.
+     * <p></p>
      * Default value is 3.
      */
     public int getRepetitions() {
@@ -72,11 +72,11 @@ public class DeepLConfiguration {
     }
 
     /**
-     * Can only be used if {@link DeepLConfiguration#repetitions} isn't zero.
+     * Is only of use if {@link DeepLConfiguration#repetitions} isn't zero.
      * This value represents the delay with which the request is repeated.
-     *
+     * <p></p>
      * Default interval is [3000 + 5000 * retryNumber] milliseconds.
-     * Note: The first retry has the retryNumber 0.
+     * <p>Note: The first retry has the retryNumber 0.
      */
     public Function<Integer, Duration> getRepetitionsDelay() {
         return repetitionsDelay;
@@ -84,10 +84,10 @@ public class DeepLConfiguration {
 
     /**
      * Whether the translation should be post-processed.
-     *
+     * <p></p>
      * If post-processing is enabled, leading and trailing spaces are removed
      * and multiple consecutive spaces are replaced with a single space.
-     *
+     * <p></p>
      * By default, post-processing is disabled.
      */
     public boolean isPostProcessingEnabled() {
@@ -111,7 +111,7 @@ public class DeepLConfiguration {
         /**
          * If the http response didn't receive within the specified time,
          * the request cancels.
-         *
+         * <p></p>
          * Default duration is 10 seconds.
          *
          * @see DeepLTranslatorBase#getTranslation(String, SourceLanguage, TargetLanguage)
@@ -123,8 +123,8 @@ public class DeepLConfiguration {
 
         /**
          * Used if an error occurs.
-         * -1 is used for repeating the request until it succeeds.
-         *
+         * <p>-1 is used for repeating the request until it succeeds.
+         * <p></p>
          * Default value is 3.
          */
         public Builder setRepetitions(int repetitions) {
@@ -133,11 +133,11 @@ public class DeepLConfiguration {
         }
 
         /**
-         * Can only be used if {@link DeepLConfiguration#repetitions} isn't zero.
+         * Is only of use if {@link DeepLConfiguration#repetitions} isn't zero.
          * This value represents the delay with which the request is repeated.
-         *
+         * <p></p>
          * Default interval is [3000 + 5000 * retryNumber] milliseconds.
-         * Note: The first retry has the retryNumber 0.
+         * <p>Note: The first retry has the retryNumber 0.
          */
         public Builder setRepetitionsDelay(Function<Integer, Duration> repetitionsDelay) {
             this.repetitionsDelay = repetitionsDelay;
@@ -146,10 +146,10 @@ public class DeepLConfiguration {
 
         /**
          * Whether the translation should be post-processed.
-         *
+         * <p></p>
          * If post-processing is enabled, leading and trailing spaces are removed
          * and multiple consecutive spaces are replaced with a single space.
-         *
+         * <p></p>
          * By default, post-processing is disabled.
          */
         public Builder setPostProcessing(boolean postProcessing) {

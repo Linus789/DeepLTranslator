@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit;
 public class DeepLTranslator extends DeepLTranslatorBase {
 
     /**
-     * With default settings
+     * With default settings.
      */
     public DeepLTranslator() {
         super();
     }
 
     /**
-     * With custom settings
+     * With custom settings.
      */
     public DeepLTranslator(DeepLConfiguration configuration) {
         super(configuration);
@@ -25,14 +25,14 @@ public class DeepLTranslator extends DeepLTranslatorBase {
 
     /**
      * Translates a text, which is limited to 5000 characters,
-     * from a source {@code Language} (from) to a target {@code Language} (to).
-     *
+     * from a {@code SourceLanguage} to a {@code TargetLanguage}.
+     * <p></p>
      * This method returns the translation or throws an exception.
-     *
+     * <p></p>
      * Possible reasons for exceptions:
-     * - text is null or empty
-     * - {@code Language} is null
-     * - text length exceeds the limit of 5000 characters
+     * <p>- text is null or empty
+     * <p>- {@code SourceLanguage} or {@code TargetLanguage} is null
+     * <p>- text length exceeds the limit of 5000 characters
      *
      * @param text source text
      * @param from source language
@@ -76,7 +76,7 @@ public class DeepLTranslator extends DeepLTranslatorBase {
     /**
      * Blocks until all translations from this instance have completed execution, or the timeout occurs,
      * or the current thread is interrupted, whichever happens first.
-     *
+     * <p></p>
      * After the termination, you can no longer use this instance for translation.
      * For new translations, you have to create another instance of DeepLTranslator.
      */
