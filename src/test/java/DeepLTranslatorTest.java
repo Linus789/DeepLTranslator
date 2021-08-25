@@ -1,5 +1,7 @@
 import de.linus.deepltranslator.*;
 
+import java.util.concurrent.TimeUnit;
+
 public class DeepLTranslatorTest {
 
     public static void main(String[] args) {
@@ -8,12 +10,19 @@ public class DeepLTranslatorTest {
                 .build();
 
         DeepLTranslator deepLTranslator = new DeepLTranslator(deepLConfiguration);
-
         async(deepLTranslator);
 
         for (String sentence : sentences) {
             sync(deepLTranslator, sentence);
         }
+
+        try {
+            deepLTranslator.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        DeepLTranslator.shutdown();
     }
 
     private static void sync(DeepLTranslator deepLTranslator, String text) {
@@ -33,8 +42,6 @@ public class DeepLTranslatorTest {
                     } else {
                         System.out.println(res);
                     }
-
-                    DeepLTranslator.shutdown();
                 });
     }
 

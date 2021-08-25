@@ -4,6 +4,8 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DeepLTranslator extends DeepLTranslatorBase {
 
@@ -68,15 +70,31 @@ public class DeepLTranslator extends DeepLTranslatorBase {
     public CompletableFuture<String> translateAsync(String text, SourceLanguage from, TargetLanguage to) throws IllegalStateException {
         isValid(text, from, to);
 
-        return CompletableFuture.supplyAsync(() -> translate(text, from, to), EXECUTOR);
+        return CompletableFuture.supplyAsync(() -> translate(text, from, to), executor);
+    }
+
+    /**
+     * Blocks until all translations from this instance have completed execution, or the timeout occurs,
+     * or the current thread is interrupted, whichever happens first.
+     *
+     * After the termination, you can no longer use this instance for translation.
+     * For new translations, you have to create another instance of DeepLTranslator.
+     */
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        executor.shutdown();
+        boolean result = executor.awaitTermination(timeout, unit);
+        EXECUTOR_LIST.remove(executor);
+        return result;
     }
 
     /**
      * Tries to quit all browsers and all active threads, which were started for asynchronous translating.
+     * This method does not wait for the running tasks to finish.
      */
     public static void shutdown() {
         GLOBAL_INSTANCES.forEach(WebDriver::quit);
-        EXECUTOR.shutdownNow();
+        EXECUTOR_LIST.forEach(ExecutorService::shutdownNow);
+        CLEANUP_EXECUTOR.shutdownNow();
     }
 
 }

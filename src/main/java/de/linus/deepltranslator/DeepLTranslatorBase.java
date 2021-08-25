@@ -24,7 +24,19 @@ class DeepLTranslatorBase {
      *
      * @see DeepLTranslator#translateAsync(String, SourceLanguage, TargetLanguage)
      */
-    static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+    final ExecutorService executor = Executors.newCachedThreadPool();
+
+    /**
+     * All executors used for asynchronous translating.
+     */
+    static final List<ExecutorService> EXECUTOR_LIST = new ArrayList<>();
+
+    /**
+     * For cleaning up the input field on the DeepL site.
+     *
+     * @see DeepLTranslator#translate(String, SourceLanguage, TargetLanguage)
+     */
+    static final ExecutorService CLEANUP_EXECUTOR = Executors.newCachedThreadPool();
 
     /**
      * All browser instances created.
@@ -95,6 +107,7 @@ class DeepLTranslatorBase {
      */
     DeepLTranslatorBase() {
         this.configuration = new DeepLConfiguration.Builder().build();
+        EXECUTOR_LIST.add(executor);
     }
 
     /**
@@ -102,6 +115,7 @@ class DeepLTranslatorBase {
      */
     DeepLTranslatorBase(DeepLConfiguration configuration) {
         this.configuration = configuration;
+        EXECUTOR_LIST.add(executor);
     }
 
     /**
@@ -193,7 +207,7 @@ class DeepLTranslatorBase {
 
         WebDriver finalDriver = driver;
 
-        EXECUTOR.submit(() -> {
+        CLEANUP_EXECUTOR.submit(() -> {
             By buttonClearBy = By.className("lmt__clear_text_button");
             By sourceText = By.id("source-dummydiv");
 
