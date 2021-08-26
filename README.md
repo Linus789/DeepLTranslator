@@ -75,7 +75,7 @@ deepLTranslator.translateAsync("Detected cow running backwards.", SourceLanguage
 ```
 
 ### Await termination
-Blocks until all translations from one `DeepLTranslator` instance have completed execution, or the timeout occurs,
+Blocks until all async translations from one `DeepLTranslator` instance have completed execution, or the timeout occurs,
 or the current thread is interrupted, whichever happens first.
 ```java
 try {

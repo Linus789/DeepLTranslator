@@ -74,11 +74,11 @@ public class DeepLTranslator extends DeepLTranslatorBase {
     }
 
     /**
-     * Blocks until all translations from this instance have completed execution, or the timeout occurs,
+     * Blocks until all async translations from this instance have completed execution, or the timeout occurs,
      * or the current thread is interrupted, whichever happens first.
      * <p></p>
-     * After the termination, you can no longer use this instance for translation.
-     * For new translations, you have to create another instance of DeepLTranslator.
+     * After the termination, you can no longer use this instance for async translations.
+     * For new async translations, you have to create another instance of DeepLTranslator.
      */
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
         executor.shutdown();
