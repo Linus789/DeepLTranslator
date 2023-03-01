@@ -6,32 +6,37 @@ import java.util.Optional;
 
 public enum TargetLanguage {
 
-    BULGARIAN("bg-BG", "translator-lang-option-bg"),
-    CHINESE_SIMPLIFIED("zh-ZH", "translator-lang-option-zh"),
-    CZECH("cs-CS", "translator-lang-option-cs"),
-    DANISH("da-DA", "translator-lang-option-da"),
-    DUTCH("nl-NL", "translator-lang-option-nl"),
+    BULGARIAN("bg", "translator-lang-option-bg"),
+    CHINESE_SIMPLIFIED("zh-Hans", "translator-lang-option-zh"),
+    CZECH("cs", "translator-lang-option-cs"),
+    DANISH("da", "translator-lang-option-da"),
+    DUTCH("nl", "translator-lang-option-nl"),
     ENGLISH_AMERICAN("en-US", "translator-lang-option-en-US"),
     ENGLISH_BRITISH("en-GB", "translator-lang-option-en-GB"),
-    ESTONIAN("et-ET", "translator-lang-option-et"),
-    FINNISH("fi-FI", "translator-lang-option-fi"),
-    FRENCH("fr-FR", "translator-lang-option-fr"),
-    GERMAN("de-DE", "translator-lang-option-de"),
-    GREEK("el-EL", "translator-lang-option-el"),
-    HUNGARIAN("hu-HU", "translator-lang-option-hu"),
-    ITALIAN("it-IT", "translator-lang-option-it"),
-    JAPANESE("ja-JA", "translator-lang-option-ja"),
-    LATVIAN("lv-LV", "translator-lang-option-lv"),
-    LITHUANIAN("lt-LT", "translator-lang-option-lt"),
-    POLISH("pl-PL", "translator-lang-option-pl"),
+    ESTONIAN("et", "translator-lang-option-et"),
+    FINNISH("fi", "translator-lang-option-fi"),
+    FRENCH("fr", "translator-lang-option-fr"),
+    GERMAN("de", "translator-lang-option-de"),
+    GREEK("el", "translator-lang-option-el"),
+    HUNGARIAN("hu", "translator-lang-option-hu"),
+    INDONESIAN("id", "translator-lang-option-id"),
+    ITALIAN("it", "translator-lang-option-it"),
+    JAPANESE("ja", "translator-lang-option-ja"),
+    KOREAN("ko", "translator-lang-option-ko"),
+    LATVIAN("lv", "translator-lang-option-lv"),
+    LITHUANIAN("lt", "translator-lang-option-lt"),
+    NORWEGIAN_BOKMAL("nb-NO", "translator-lang-option-nb"),
+    POLISH("pl", "translator-lang-option-pl"),
     PORTUGUESE("pt-PT", "translator-lang-option-pt-PT"),
     PORTUGUESE_BRAZILIAN("pt-BR", "translator-lang-option-pt-BR"),
-    ROMANIAN("ro-RO", "translator-lang-option-ro"),
-    RUSSIAN("ru-RU", "translator-lang-option-ru"),
-    SLOVAK("sk-SK", "translator-lang-option-sk"),
-    SLOVENIAN("sl-SL", "translator-lang-option-sl"),
-    SPANISH("es-ES", "translator-lang-option-es"),
-    SWEDISH("sv-SV", "translator-lang-option-sv");
+    ROMANIAN("ro", "translator-lang-option-ro"),
+    RUSSIAN("ru", "translator-lang-option-ru"),
+    SLOVAK("sk", "translator-lang-option-sk"),
+    SLOVENIAN("sl", "translator-lang-option-sl"),
+    SPANISH("es", "translator-lang-option-es"),
+    SWEDISH("sv", "translator-lang-option-sv"),
+    TURKISH("tr", "translator-lang-option-tr"),
+    UKRAINIAN("uk", "translator-lang-option-uk");
 
     private static Map<String, TargetLanguage> codeToLanguage;
     private final String languageCode;
@@ -53,9 +58,9 @@ public enum TargetLanguage {
     }
 
     /**
-     * Returns the language code (ISO 639‑1 language code, hyphen, ISO-3166 country code – e.g. en-US).
+     * Returns the language code (IETF language tag, e.g. en-US or de).
      *
-     * @return language code (ISO 639‑1 language code, hyphen, ISO-3166 country code – e.g. en-US)
+     * @return language code (IETF language tag, e.g. en-US or de)
      */
     public String getLanguageCode() {
         return languageCode;
@@ -71,9 +76,9 @@ public enum TargetLanguage {
     }
 
     /**
-     * Returns the language from a specific language code (ISO 639‑1 language code, hyphen, ISO-3166 country code – e.g. en-US).
+     * Returns the language from a specific language code (IETF language tag, e.g. en-US or de).
      *
-     * @param languageCode language code (ISO 639‑1 language code, hyphen, ISO-3166 country code – e.g. en-US)
+     * @param languageCode language code (IETF language tag, e.g. en-US or de)
      * @return the language
      */
     public static Optional<TargetLanguage> getLanguage(String languageCode) {

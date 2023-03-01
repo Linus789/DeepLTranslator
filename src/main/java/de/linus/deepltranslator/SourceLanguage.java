@@ -19,9 +19,13 @@ public enum SourceLanguage {
     GERMAN("de", "translator-lang-option-de"),
     GREEK("el", "translator-lang-option-el"),
     HUNGARIAN("hu", "translator-lang-option-hu"),
+    INDONESIAN("id", "translator-lang-option-id"),
+    ITALIAN("it", "translator-lang-option-it"),
     JAPANESE("ja", "translator-lang-option-ja"),
+    KOREAN("ko", "translator-lang-option-ko"),
     LATVIAN("lv", "translator-lang-option-lv"),
     LITHUANIAN("lt", "translator-lang-option-lt"),
+    NORWEGIAN("nb", "translator-lang-option-nb"),
     POLISH("pl", "translator-lang-option-pl"),
     PORTUGUESE("pt", "translator-lang-option-pt"),
     ROMANIAN("ro", "translator-lang-option-ro"),
@@ -29,7 +33,9 @@ public enum SourceLanguage {
     SLOVAK("sk", "translator-lang-option-sk"),
     SLOVENIAN("sl", "translator-lang-option-sl"),
     SPANISH("es", "translator-lang-option-es"),
-    SWEDISH("sv", "translator-lang-option-sv");
+    SWEDISH("sv", "translator-lang-option-sv"),
+    TURKISH("tr", "translator-lang-option-tr"),
+    UKRAINIAN("uk", "translator-lang-option-uk");
 
     private static Map<String, SourceLanguage> codeToLanguage;
     private final String languageCode;
@@ -51,9 +57,9 @@ public enum SourceLanguage {
     }
 
     /**
-     * Returns the language code (ISO 639‑1 scheme).
+     * Returns the language code (IETF language tag, e.g. en-US or de).
      *
-     * @return language code (ISO 639‑1)
+     * @return language code (IETF language tag, e.g. en-US or de)
      */
     public String getLanguageCode() {
         return languageCode;
@@ -69,9 +75,9 @@ public enum SourceLanguage {
     }
 
     /**
-     * Returns the language from a specific language code (ISO 639‑1 scheme).
+     * Returns the language from a specific language code (IETF language tag, e.g. en-US or de).
      *
-     * @param languageCode language code (ISO 639‑1)
+     * @param languageCode language code (IETF language tag, e.g. en-US or de)
      * @return the language
      */
     public static Optional<SourceLanguage> getLanguage(String languageCode) {
