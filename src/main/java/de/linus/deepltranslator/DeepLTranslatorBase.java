@@ -209,7 +209,7 @@ class DeepLTranslatorBase {
         WebDriver finalDriver = driver;
 
         CLEANUP_EXECUTOR.submit(() -> {
-            By buttonClearBy = By.className("lmt__clear_text_button");
+            By buttonClearBy = By.id("translator-source-clear-button");
             By sourceText = By.id("source-dummydiv");
 
             try {
