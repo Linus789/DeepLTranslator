@@ -39,7 +39,8 @@ public class DeepLTranslator extends DeepLTranslatorBase {
      * @param to target language
      *
      * @return the translation
-     * @throws Exception an exception
+     * @throws IllegalStateException invalid argument(s)
+     * @throws TimeoutException translation failed and no more repetitions available
      */
     public String translate(String text, SourceLanguage from, TargetLanguage to) throws IllegalStateException, TimeoutException {
         isValid(text, from, to);
