@@ -18,7 +18,7 @@ Add the dependency
 <dependency>
     <groupId>com.github.Linus789</groupId>
     <artifactId>DeepLTranslator</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 ### Gradle
@@ -34,7 +34,7 @@ allprojects {
 Add the dependency
 ```kotlin
 dependencies {
-    implementation 'com.github.Linus789:DeepLTranslator:2.0.0'
+    implementation 'com.github.Linus789:DeepLTranslator:2.1.0'
 }
 ```
 
